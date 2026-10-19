@@ -8,6 +8,7 @@ A Claude Code plugin that turns the main chat into an **orchestrator**: it plans
 - **Orchestrator instructions**, injected at session start: when to delegate, parallel by default, how to brief, and the retro rules.
 - **A delegation ledger**: one JSON line per subagent call and finish (tokens, duration, status, friction).
 - **A retro gate**: after 5 subagent runs in a session, Claude is stopped once and asked to run a retro. `/orch:retro` runs one on demand.
+- **A fact-check gate**: when Claude finishes a reply, a Sonnet agent lists the reply's factual claims (what exists, what works, what's needed, counts, paths) and looks in the transcript for a tool result or user message that backs each one. If any are unbacked, the reply goes back once with "Unverified claims: …" to verify, remove or label them. This adds one Sonnet run (up to 120 s) to every reply; it is always on while the plugin is enabled.
 - **Context budget**: agents cut filler but never facts (no pasted diffs, logs or narration), and the planner writes its plan to a file and returns an index, and the orchestrator follows lean-context rules (files over pastes, noisy work delegated, small screenshots). The retro summary shows each report's size.
 - **Learnings**: a short rule list that each retro curates and every new session reads. A fresh install starts from a generic set.
 

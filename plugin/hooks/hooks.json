@@ -1,19 +1,62 @@
 {
-  "description": "Orchestrator instructions + learnings at session start, delegation ledger, and the retro gate.",
+  "description": "Orchestrator instructions + learnings at session start, delegation ledger, retro gate, and a fact-check gate on every reply.",
   "hooks": {
     "SessionStart": [
-      { "matcher": "startup|clear|compact",
-        "hooks": [ { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/session-start.sh\"", "timeout": 10 } ] }
+      {
+        "matcher": "startup|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/session-start.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
     ],
     "PostToolUse": [
-      { "matcher": "Agent|Task",
-        "hooks": [ { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/ledger.sh\"", "timeout": 10 } ] }
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/ledger.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
     ],
     "SubagentStop": [
-      { "hooks": [ { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/ledger.sh\"", "timeout": 10 } ] }
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/ledger.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
     ],
     "Stop": [
-      { "hooks": [ { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/retro-gate.sh\"", "timeout": 10 } ] }
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/retro-gate.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "You are a fact-check gate on the assistant's final reply. Hook input JSON: $ARGUMENTS\n1. If stop_hook_active is true, return {\"ok\": true} (it was already sent back once; do not loop).\n2. The reply is last_assistant_message. List its factual claims about code, files, config, data, services or the environment: what exists, what is or isn't built/running/deployed, what works or fails, what is needed (keys, setup), counts, versions, paths. Ignore questions, plans, opinions, recommendations, general knowledge, and anything explicitly labelled unverified, assumed, likely or untested.\n3. If there are no such claims, return {\"ok\": true}.\n4. For each claim, look for evidence in transcript_path (a JSONL transcript). It is large: use Grep on distinctive words from the claim, and Read only small ranges near the end. Evidence means a tool result (command output, file contents, test output, web page, or a subagent's report) that supports the claim, or the user stating it. Earlier turns count.\n5. If any claim has no supporting evidence, return {\"ok\": false, \"reason\": \"Unverified claims in your reply: <quote each briefly>. Verify each with a tool call now, or remove it, or label it unverified. Then send the corrected reply.\"}. Otherwise return {\"ok\": true}.\nBe strict about caveats such as 'X won't work' or 'needs keys': those are claims too. Return only the JSON.",
+            "model": "claude-sonnet-5-5",
+            "timeout": 120,
+            "statusMessage": "Fact-checking reply"
+          }
+        ]
+      }
     ]
   }
 }
