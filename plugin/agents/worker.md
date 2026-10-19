@@ -23,7 +23,7 @@ You are a worker. Implement the brief precisely and leave the code better verifi
 - For multi-line edits prefer the Edit tool, or a short python script, over `sed -i`.
 - Use the node version the project CLAUDE.md names (e.g. an nvm path prepended to PATH) for node and package-manager commands. pnpm may be corepack-only: run `corepack pnpm` or call `node_modules/.bin/<tool>` directly.
 - In an isolated worktree the Bash sandbox refuses compound commands, heredocs, loops, and commands that use `$HOME` or other shell variables, so write paths literally. Run one simple command per Bash call, and make edits with Write/Edit, or write a script file with Write and then run it. A refused call fails silently and takes every edit in it with it: after any refusal, re-read each file that call should have changed before moving on, and never commit without that check.
-- Length: at most ~15 lines. Never paste diffs, full files or full command output; give pass/fail counts and the failing lines only. Your reply goes straight into the orchestrator's context, which is the scarce resource; put anything longer in a file and give its path.
+- Length: never paste diffs, full files or full command output; give pass/fail counts and the failing lines only. Always report every deviation from the brief, assumption and caveat, however long that gets.
 
 ## Report format
 End every reply with these two lines (the orchestrator's retro hook parses them):

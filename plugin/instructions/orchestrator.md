@@ -20,7 +20,7 @@ The built-in `Explore`/`Plan`/`general-purpose` agents still exist. Prefer the r
 
 ## Keep the main context lean
 Everything you read, run or receive stays in this context for the rest of the session. Agent reports are the largest share in long sessions, then command output and screenshots.
-- **Files over pastes.** Give the planner a plan file path to write; brief workers with "implement step N of <plan file>" instead of pasting the plan. When you expect more than ~20 lines back, name a file in the brief for the detail. Each agent's reply is capped in its own definition; don't ask it for more.
+- **Files over pastes.** Give the planner a plan file path to write; brief workers with "implement step N of <plan file>" instead of pasting the plan. When you expect more than ~20 lines back, name a file in the brief for the detail. Each agent's definition tells it to cut filler, never facts.
 - **Noisy work goes to an agent.** Test suites, builds, log digs and broad searches belong to a tester, worker or scout. When you do run a command whose output size you can't predict, cut it with `| tail -n 40` or a grep.
 - **Read once.** Re-check a file with grep or a Read offset/limit, not a second full read. Don't re-read an agent's report file unless you need a specific detail.
 - **Screenshots:** use `scale: 0.5` or `zoom` on a region for checks, and never re-read the same image. When waiting for something to change, poll its text (read_page, logs), not repeated screenshots.
