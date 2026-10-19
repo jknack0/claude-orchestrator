@@ -1,0 +1,17 @@
+- Briefs: every concrete claim (a path, table, version, flag, "X is installed", "Y has no test") was checked this session by a tool call or a scout report, or is written as "check whether X". Wrong or unverified brief claims are the most common source of wasted agent runs.
+- Never assume what exists or how it works, in briefs or in answers to the user. Verify in code, a screenshot or the docs first, or say "unverified".
+- A server change that an already-shipped client reads or writes: the brief says what that client sends and expects, and the server must keep honouring it. A default-on change: the brief asks "who now receives this?".
+- Before dispatching a worker or tester, paste the project-specific setup it needs (test DB, ports, devices, env files) and the exact check commands. Undocumented local setup is the second most common friction.
+- Settle open design questions before briefing: who owns each shared file, which env or flags to test against, what happens on failure paths. Put the user's standing preferences (e.g. "simplest fix, least user interaction") in the brief.
+- Contract first: land a shared contract (types, signatures, routes) before dependent workers start. In step 0, map every id and displayed field a consumer needs to the endpoint and field that supplies it, and list what already exists (shared types, routes, stubs, enum values) and who owns each shared file.
+- Parallel agents share the scratchpad, devices and dev-server ports: give each its own scratchpad subdirectory and say which device, port or instance it owns, or serialise those runs.
+- Agent `isolation: "worktree"` cuts from the default branch: when work builds on unmerged commits, start the brief with `git reset --hard <sha>`. A fresh worktree has no installed dependencies and no gitignored env files; say how to get them.
+- Write tool paths literally (no `$HOME`) and check commands as single simple commands (no `&&`, pipes, loops or heredocs) when an agent runs in a sandboxed worktree.
+- Use the cheap `scout` for history audits, fact-checks and inventories; keep `reviewer` for diffs.
+- Researcher briefs: name the URLs that matter and say what to skip. Many review and social sites block automated fetches; list them as "not reachable" instead of retrying.
+- UI checks: give layout briefs the viewport and measurable acceptance (no horizontal scroll, labels untruncated). Do the final visual pass yourself.
+- Experiments (models, prompts, pipelines): build only the CLI or scratch path, run the side-by-side, and wire it into the product after the user picks.
+- Merging main into a long-lived branch: besides conflicts, read `git log --first-parent --oneline HEAD..origin/main` for removed or renamed models, fields and APIs the branch uses, and put them in the merge brief.
+- Test fakes for external services must enforce the real provider's documented limits (minimums, time windows, idempotency), and a reviewer should check them.
+- Fix briefs state the observed symptom and repro, and label any cause as a guess ("likely X; confirm").
+- Project-specific facts (test DB recipes, mocks, lint quirks) go in that project's CLAUDE.md under "Lessons from agent retros". Keep this file for cross-project rules.

@@ -1,0 +1,12 @@
+{
+  "name": "claude-orchestrator",
+  "owner": { "name": "jknack0" },
+  "metadata": { "description": "Orchestrator mode and retro learning loop for Claude Code." },
+  "plugins": [
+    {
+      "name": "orch",
+      "source": "./plugin",
+      "description": "Subagent roster, delegation ledger and a self-improving retro loop."
+    }
+  ]
+}

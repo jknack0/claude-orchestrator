@@ -1,0 +1,19 @@
+{
+  "description": "Orchestrator instructions + learnings at session start, delegation ledger, and the retro gate.",
+  "hooks": {
+    "SessionStart": [
+      { "matcher": "startup|clear|compact",
+        "hooks": [ { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/session-start.sh\"", "timeout": 10 } ] }
+    ],
+    "PostToolUse": [
+      { "matcher": "Agent|Task",
+        "hooks": [ { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/ledger.sh\"", "timeout": 10 } ] }
+    ],
+    "SubagentStop": [
+      { "hooks": [ { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/ledger.sh\"", "timeout": 10 } ] }
+    ],
+    "Stop": [
+      { "hooks": [ { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/retro-gate.sh\"", "timeout": 10 } ] }
+    ]
+  }
+}
