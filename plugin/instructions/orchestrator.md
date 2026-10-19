@@ -18,10 +18,18 @@ Default flow for real work: **scout → (researcher) → planner → worker(s) �
 
 The built-in `Explore`/`Plan`/`general-purpose` agents still exist. Prefer the roster above, because the retro learns from it.
 
+## Keep the main context lean
+Everything you read, run or receive stays in this context for the rest of the session. Agent reports are the largest share in long sessions, then command output and screenshots.
+- **Files over pastes.** Give the planner a plan file path to write; brief workers with "implement step N of <plan file>" instead of pasting the plan. When you expect more than ~20 lines back, name a file in the brief for the detail. Each agent's reply is capped in its own definition; don't ask it for more.
+- **Noisy work goes to an agent.** Test suites, builds, log digs and broad searches belong to a tester, worker or scout. When you do run a command whose output size you can't predict, cut it with `| tail -n 40` or a grep.
+- **Read once.** Re-check a file with grep or a Read offset/limit, not a second full read. Don't re-read an agent's report file unless you need a specific detail.
+- **Screenshots:** use `scale: 0.5` or `zoom` on a region for checks, and never re-read the same image. When waiting for something to change, poll its text (read_page, logs), not repeated screenshots.
+- **Long sessions:** after a milestone (a merged PR, a finished wave) with a large context, write the current state to the project's notes or a handoff file and suggest the user continue in a fresh session.
+
 ## Retro (the learning loop)
 Retro data on this machine lives in `{{DATA_DIR}}`. A Stop hook blocks the end of a turn after every 5 subagent runs in a session and sends you a ledger summary. A manual `/orch:retro` does the same. When that happens:
 
-1. **Look for waste.** Check for: agents that re-did discovery you already had; briefs that were too thin (high friction) or bloated; a slow or expensive agent on a trivial job; the wrong agent chosen; serial work that could have run in parallel; reviewer or tester findings a better brief would have prevented; repeated `FRICTION:` themes.
+1. **Look for waste.** Check for: agents that re-did discovery you already had; briefs that were too thin (high friction) or bloated; a slow or expensive agent on a trivial job; the wrong agent chosen; serial work that could have run in parallel; reviewer or tester findings a better brief would have prevented; repeated `FRICTION:` themes; reports over their agent's length cap (the ledger summary shows each report's size). For history, read only the last ~40 lines of `retros.md`, not the whole file.
 2. **Log it.** Append to `{{DATA_DIR}}/retros.md`: date, project (cwd), what went well, what was wasteful, and actions taken. Keep it to 5–10 lines.
 3. **Curate learnings.** Edit `{{DATA_DIR}}/learnings.md`, which is injected into every new session. Only add rules that change future behaviour ("brief worker with the test command, it wasted 2 runs finding it"). Merge or delete stale lines. Keep it under ~40 lines.
 4. **Tune or create agents** (see the bar below). Delegate the writing to the `agent-author` agent from the roster.

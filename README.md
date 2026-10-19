@@ -8,6 +8,7 @@ A Claude Code plugin that turns the main chat into an **orchestrator**: it plans
 - **Orchestrator instructions**, injected at session start: when to delegate, parallel by default, how to brief, and the retro rules.
 - **A delegation ledger**: one JSON line per subagent call and finish (tokens, duration, status, friction).
 - **A retro gate**: after 5 subagent runs in a session, Claude is stopped once and asked to run a retro. `/orch:retro` runs one on demand.
+- **Context budget**: every agent's reply is length-capped (the planner writes its plan to a file and returns an index), and the orchestrator follows lean-context rules (files over pastes, noisy work delegated, small screenshots). The retro summary shows each report's size.
 - **Learnings**: a short rule list that each retro curates and every new session reads. A fresh install starts from a generic set.
 
 ## Install

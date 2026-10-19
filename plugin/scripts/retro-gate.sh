@@ -39,9 +39,9 @@ SUMMARY=$(tail -n +$((LASTLINE + 1)) "$O/ledger.jsonl" | jq -rs --arg s "$SID" '
   | .[] | .c as $c | .d as $d
   | (($c.status // $d.status)) as $st | (($c.friction // $d.friction)) as $fr
   | if $c then
-      "- \($c.agent_type) | \($c.description) | \($c.model // "?") | \(if $c.tokens then "\(k($c.tokens)) tok" elif $d.tokens then "~\(k($d.tokens)) tok" else "? tok" end) | \($c.tool_uses // $d.tool_uses // "?") tools | \(if $c.background then "bg" elif $c.duration_ms then "\($c.duration_ms / 1000 | floor)s" else "?" end) | brief \($c.prompt_chars)ch\(if $c.background and $c.agent_id and ($d == null) then " | still running" else "" end)\(if $st then " | \($st)" else "" end)\(if $fr then " | \($fr)" else "" end)"
+      "- \($c.agent_type) | \($c.description) | \($c.model // "?") | \(if $c.tokens then "\(k($c.tokens)) tok" elif $d.tokens then "~\(k($d.tokens)) tok" else "? tok" end) | \($c.tool_uses // $d.tool_uses // "?") tools | \(if $c.background then "bg" elif $c.duration_ms then "\($c.duration_ms / 1000 | floor)s" else "?" end) | brief \($c.prompt_chars)ch\(if ($c.report_chars // 0) > 0 then " | report \($c.report_chars)ch" elif ($d.output_chars // 0) > 0 then " | report \($d.output_chars)ch" else "" end)\(if $c.background and $c.agent_id and ($d == null) then " | still running" else "" end)\(if $st then " | \($st)" else "" end)\(if $fr then " | \($fr)" else "" end)"
     elif ($st or $fr) then
-      "- \($d.agent_type) finished | \(if $d.tokens then "~\(k($d.tokens)) tok | " else "" end)\(if $d.tool_uses then "\($d.tool_uses) tools | " else "" end)\($st // "") | \($fr // "")"
+      "- \($d.agent_type) finished | \(if ($d.output_chars // 0) > 0 then "report \($d.output_chars)ch | " else "" end)\(if $d.tokens then "~\(k($d.tokens)) tok | " else "" end)\(if $d.tool_uses then "\($d.tool_uses) tools | " else "" end)\($st // "") | \($fr // "")"
     else empty end')
 
 REASON="RETRO DUE ($NEW subagent runs since the last retro in this session). Before ending, run the learning-loop retro described under \"Retro\" in the Orchestrator mode instructions.

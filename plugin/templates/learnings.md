@@ -15,3 +15,4 @@
 - Test fakes for external services must enforce the real provider's documented limits (minimums, time windows, idempotency), and a reviewer should check them.
 - Fix briefs state the observed symptom and repro, and label any cause as a guess ("likely X; confirm").
 - Project-specific facts (test DB recipes, mocks, lint quirks) go in that project's CLAUDE.md under "Lessons from agent retros". Keep this file for cross-project rules.
+- `scout`, `reviewer` and `researcher` have no Write tool: for scratch scripts, tell them to write the file with a Bash heredoc into their own scratch subdir. `planner` may Write only its plan file.

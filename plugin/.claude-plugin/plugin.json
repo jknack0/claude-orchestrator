@@ -1,6 +1,6 @@
 {
   "name": "orch",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Orchestrator mode for Claude Code: a roster of subagents, a delegation ledger, and a retro loop that learns from every 5 delegations.",
   "author": { "name": "jknack0" },
   "repository": "https://github.com/jknack0/claude-orchestrator",
