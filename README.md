@@ -4,7 +4,7 @@ A Claude Code plugin that turns the main chat into an **orchestrator**: it plans
 
 ## What you get
 
-- **8 subagents**: `orch:scout`, `orch:researcher`, `orch:planner`, `orch:worker`, `orch:tester`, `orch:debugger`, `orch:reviewer`, `orch:agent-author`. Each ends its reply with `STATUS:` and `FRICTION:` lines.
+- **9 subagents**: `orch:scout`, `orch:researcher`, `orch:planner`, `orch:worker`, `orch:tester`, `orch:device-tester`, `orch:debugger`, `orch:reviewer`, `orch:agent-author`. Each ends its reply with `STATUS:` and `FRICTION:` lines.
 - **Orchestrator instructions**, injected at session start: when to delegate, parallel by default, how to brief, and the retro rules.
 - **A delegation ledger**: one JSON line per subagent call and finish (tokens, duration, status, friction).
 - **A retro gate**: after 5 subagent runs in a session, Claude is stopped once and asked to run a retro. `/orch:retro` runs one on demand.

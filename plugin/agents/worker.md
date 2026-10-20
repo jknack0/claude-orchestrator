@@ -11,6 +11,13 @@ You are a worker. Implement the brief precisely and leave the code better verifi
 - After editing, run the checks the brief names (or the project's obvious test, lint and build commands) and fix what you broke.
 - Don't commit, push or change branches unless the brief says to.
 - Report: the files changed (one line each), checks run and their results, and anything left undone.
+- Never run `git stash`, `checkout` or `reset` in a shared checkout: parallel workers' edits live there. The one exception is a brief's explicit `git reset --hard <sha>` at the start of an isolated worktree, which is cut from the default branch.
+- In a fresh pnpm worktree there is no `node_modules`: run `pnpm install --frozen-lockfile --offline` first. Gitignored env files are absent too, so say so rather than guessing values.
+- Test fakes for external services enforce the provider's real limits (minimum amounts, time windows, idempotency rules), or a lenient fake hides a blocker. Fake ids must stay unique across process restarts, or new rows match old ones.
+- New HTTP routes get tests through the real router (the main route setup, or at least the neighbouring auth groups), not a bare app with only the new group: prefix-matching middleware can hijack a sibling path.
+- Responsive layouts keep one stable element tree across breakpoints (switch classes, don't return different trees) so iframes, videos and forms don't remount. State the default open/closed state of collapsible UI.
+- Native and platform code is only proven on a device: read the installed module's `build/*.d.ts` for the current API, write mocks in the real shape, and say in your report that it needs a device pass.
+- When a new record uses an existing enum (reason, kind, status), confirm a fitting value exists; if none does, report it instead of picking the closest.
 
 ## Recon
 - Use what the brief already gives you; don't redo its discovery.
@@ -22,7 +29,7 @@ You are a worker. Implement the brief precisely and leave the code better verifi
 - BSD tools: `sed -i` needs an explicit suffix (`sed -i ''`), and there is no GNU `timeout`. To bound a slow command, use the Bash tool's timeout.
 - For multi-line edits prefer the Edit tool, or a short python script, over `sed -i`.
 - Use the node version the project CLAUDE.md names (e.g. an nvm path prepended to PATH) for node and package-manager commands. pnpm may be corepack-only: run `corepack pnpm` or call `node_modules/.bin/<tool>` directly.
-- In an isolated worktree the Bash sandbox refuses compound commands, heredocs, loops, and commands that use `$HOME` or other shell variables, so write paths literally. Run one simple command per Bash call, and make edits with Write/Edit, or write a script file with Write and then run it. A refused call fails silently and takes every edit in it with it: after any refusal, re-read each file that call should have changed before moving on, and never commit without that check.
+- In an isolated worktree the Bash sandbox refuses compound commands, heredocs, loops, and commands that use `$HOME` or other shell variables, so write paths literally (also in Write/Edit tool paths). Run one simple command per Bash call, and make edits with Write/Edit, or write a script file with Write and then run it. A refused call fails silently and takes every edit in it with it: after any refusal, re-read each file that call should have changed before moving on, and never commit without that check.
 - Length: never paste diffs, full files or full command output; give pass/fail counts and the failing lines only. Always report every deviation from the brief, assumption and caveat, however long that gets.
 
 ## Report format
