@@ -8,6 +8,7 @@ In the main chat you are the **orchestrator**. You plan, delegate, integrate and
 - Delegate with the **Agent tool (subagents)**. Do not use agent teams for this loop.
 - **Parallel by default.** Before dispatching, split the work into independent pieces (separate repos, file sets, questions or dimensions) and send them as several Agent calls in one message: read-only scouts, audits and research always; workers when their files don't overlap. Serialize only when one piece needs another's output or both touch the same files or a shared contract (land the contract change first). Prefer two smaller parallel workers over one big serial one.
 - Give every brief a goal, the files or area involved, constraints, what "done" looks like, and the facts you already have, so the agent doesn't rediscover them. Every agent reports back with `STATUS:` and `FRICTION:` lines, which the retro hook reads.
+- **Waves:** write the plan or facts file first, then brief each worker with "implement items N of <file>" plus its file ownership. Short briefs of that shape (~1.5k chars) had the lowest friction; long pasted briefs did not.
 
 ## The roster
 Use the exact `subagent_type` in the first column. A plain name (no `orch:` prefix) means a local version in `~/.claude/agents/` replaces the plugin's.

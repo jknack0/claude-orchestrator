@@ -29,8 +29,8 @@ case "$EVENT" in
       tool_uses: ($r.totalToolUseCount // null),
       duration_ms: ($r.totalDurationMs // .duration_ms // null),
       report_chars: ($rep | length),
-      status: ($rep | [splits("\n") | select(test("^\\**STATUS\\**:"; "i"))] | first // null),
-      friction: ($rep | [splits("\n") | select(test("^\\**FRICTION\\**:"; "i"))] | first // null)
+      status: ($rep | [splits("\n") | select(test("^\\**STATUS\\**:"; "i"))] | last // null),
+      friction: ($rep | [splits("\n") | select(test("^\\**FRICTION\\**:"; "i"))] | last // null)
     }' <<<"$IN" >> "$O/ledger.jsonl"
     ;;
   SubagentStop)
@@ -61,8 +61,8 @@ case "$EVENT" in
       tokens: ($st.tokens // null),
       tool_uses: ($st.tool_uses // null),
       output_chars: ($rep | length),
-      status: ($rep | [splits("\n") | select(test("^\\**STATUS\\**:"; "i"))] | first // null),
-      friction: ($rep | [splits("\n") | select(test("^\\**FRICTION\\**:"; "i"))] | first // null)
+      status: ($rep | [splits("\n") | select(test("^\\**STATUS\\**:"; "i"))] | last // null),
+      friction: ($rep | [splits("\n") | select(test("^\\**FRICTION\\**:"; "i"))] | last // null)
     }' <<<"$IN" >> "$O/ledger.jsonl"
     ;;
 esac
